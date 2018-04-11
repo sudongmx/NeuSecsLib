@@ -9,7 +9,7 @@ namespace SECSDataLib
 {
     public interface IData
     {
-        void WriteSecsByte(ref byte[] outArray, int arrayLen);
+        void WriteSecsByte(List<ArraySegment<byte>> list);
         void WriteToSml(StringWriter writer);
     }
 }
