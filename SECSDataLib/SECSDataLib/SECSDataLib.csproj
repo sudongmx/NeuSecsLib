@@ -65,6 +65,7 @@
     <Compile Include="DataItem\HSMSHeader.cs" />
     <Compile Include="DataItem\HSMSMessage.cs" />
     <Compile Include="DataItem\HSMSMessageType.cs" />
+    <Compile Include="DataItem\HSMSStreamParser.cs" />
     <Compile Include="DataItem\IData.cs" />
     <Compile Include="DataItem\IDataNode.cs" />
     <Compile Include="DataItem\ListDataNode.cs" />
