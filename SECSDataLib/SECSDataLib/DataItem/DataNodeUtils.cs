@@ -61,5 +61,23 @@ namespace SECSDataLib.Core.DataItem
 
             return vals;
         }
+        public static DataNode CreateDataNode(DataNodeType type)
+        {
+            DataNode node = null;
+            switch (type)
+            {
+                case DataNodeType.ASCII:
+                case DataNodeType.JIS8:
+                    node = new StringDataNode(type);
+                    break;
+                case DataNodeType.LIST:
+                    node = new ListDataNode();
+                    break;
+                default:
+                    node = new DigitDataNode(type);
+                    break;
+            }
+            return node;
+        }
     }
 }

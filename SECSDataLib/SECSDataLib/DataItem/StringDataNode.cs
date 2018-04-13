@@ -8,7 +8,7 @@ namespace SECSDataLib.Core.DataItem
 {
     public class StringDataNode : DataNode
     {
-        public StringDataNode() : base()
+        public StringDataNode(DataNodeType t) : base(t)
         {
 
         }

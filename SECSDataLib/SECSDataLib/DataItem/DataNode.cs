@@ -9,15 +9,20 @@ namespace SECSDataLib.Core.DataItem
 {
     public abstract class DataNode : IDataNode
     {
-        protected int len;
-        protected DataNodeType type;
-        protected List<ArraySegment<byte>> values;
+
+        protected ArraySegment<byte> values;
         protected List<IData> children;
 
-        public DataNode()
+        public DataNodeType DataType { get; private set }
+        public int Count { get; set; }
+        public int Length { get; set; }
+        public DataNode(DataNodeType t)
         {
-            values = new List<ArraySegment<byte>>();
+            values = new ArraySegment<byte>();
             children = new List<IData>();
+            DataType = t;
+            Count = 0;
+            Length = 0;
         }
 
         public List<IData> GetChildren()
@@ -25,7 +30,7 @@ namespace SECSDataLib.Core.DataItem
             return children;
         }
 
-        public List<ArraySegment<byte>> GetRawValues()
+        public ArraySegment<byte> GetRawValues()
         {
             return values;
         }

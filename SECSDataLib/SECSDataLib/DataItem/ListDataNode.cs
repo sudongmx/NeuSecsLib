@@ -8,7 +8,7 @@ namespace SECSDataLib.Core.DataItem
 {
     public class ListDataNode : DataNode
     {
-        public ListDataNode() : base()
+        public ListDataNode() : base(DataNodeType.LIST)
         {
 
         }

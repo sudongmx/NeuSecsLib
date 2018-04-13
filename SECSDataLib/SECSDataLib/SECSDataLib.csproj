@@ -69,6 +69,7 @@
     <Compile Include="DataItem\IData.cs" />
     <Compile Include="DataItem\IDataNode.cs" />
     <Compile Include="DataItem\ListDataNode.cs" />
+    <Compile Include="DataItem\MessageDelegate.cs" />
     <Compile Include="DataItem\StringDataNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>

@@ -13,6 +13,12 @@ namespace SECSDataLib.Core.DataItem
         public HSMSHeader Header { get; set; }
         public DataNode DataRoot { get; set; }
 
+        public HSMSMessage()
+        {
+            Length = 0;
+            Header = new HSMSHeader();
+            DataRoot = null;
+        }
         public void WriteSecsByte(List<ArraySegment<byte>> list)
         {
             throw new NotImplementedException();

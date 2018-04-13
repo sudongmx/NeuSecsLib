@@ -8,7 +8,7 @@ namespace SECSDataLib.Core.DataItem
 {
     public interface IDataNode : IData
     {
-        List<ArraySegment<byte>> GetRawValues();
+        ArraySegment<byte> GetRawValues();
         List<IData> GetChildren();
         IData GetSingleChild(int i);
     }

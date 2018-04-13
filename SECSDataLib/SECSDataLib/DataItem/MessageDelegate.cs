@@ -6,10 +6,5 @@ using System.Threading.Tasks;
 
 namespace SECSDataLib.Core.DataItem
 {
-    public class DigitDataNode : DataNode
-    {
-        public DigitDataNode(DataNodeType type) : base(type)
-        {
-        }
-    }
+    public delegate void HandleReceivedMessage(HSMSMessage dataMessage);
 }
