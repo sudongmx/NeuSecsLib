@@ -3,14 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.IO;
 
 namespace SECSDataLib.Core.DataItem
 {
-    public interface IData
+    public class DigitDataNode : DataNode
     {
-        void WriteSecsByte(List<ArraySegment<byte>> list);
-        void WriteToSml(StringWriter writer);
-
+        public DigitDataNode() : base()
+        {
+            values = new List<ArraySegment<byte>>();
+        }
     }
 }

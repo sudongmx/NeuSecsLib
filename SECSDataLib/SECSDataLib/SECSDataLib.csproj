@@ -58,7 +58,17 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DataItem\DataNode.cs" />
+    <Compile Include="DataItem\DataNodeType.cs" />
+    <Compile Include="DataItem\DataNodeUtils.cs" />
+    <Compile Include="DataItem\DigitDataNode.cs" />
+    <Compile Include="DataItem\HSMSHeader.cs" />
+    <Compile Include="DataItem\HSMSMessage.cs" />
+    <Compile Include="DataItem\HSMSMessageType.cs" />
     <Compile Include="DataItem\IData.cs" />
+    <Compile Include="DataItem\IDataNode.cs" />
+    <Compile Include="DataItem\ListDataNode.cs" />
+    <Compile Include="DataItem\StringDataNode.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
