@@ -19,7 +19,7 @@ namespace SECSDataLib.Core.DataItem
         public byte[] ReceiveBuffer { get; private set; }
         public int WriteStart { get; private set; }
         public int ReadStart { get; private set; }
-        public int BufferLength => ReceiveBuffer.Length - BufferStart;
+        public int BufferLength => ReceiveBuffer.Length - WriteStart;
         public ParseStatus Status { get; private set; }
     }
 }
