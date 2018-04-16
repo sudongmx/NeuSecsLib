@@ -13,7 +13,7 @@ namespace SECSDataLib.Core.DataItem
         protected ArraySegment<byte> values;
         protected List<IData> children;
 
-        public DataNodeType DataType { get; private set }
+        public DataNodeType DataType { get; private set; }
         public int Count { get; set; }
         public int Length { get; set; }
         public DataNode(DataNodeType t)
@@ -33,6 +33,10 @@ namespace SECSDataLib.Core.DataItem
         public ArraySegment<byte> GetRawValues()
         {
             return values;
+        }
+        public void SetRawValues(ArraySegment<byte> v)
+        {
+            values = v;
         }
 
         public IData GetSingleChild(int i)

@@ -29,11 +29,13 @@ namespace SECSDataLib.Core.DataItem
         private HSMSMessage message;
         private Stack<DataNode> storeStack;
         private DataNode curData;
+        private int decodeCount;
         public HSMSStreamParser(HandleReceivedMessage handle)
         {
             ReceiveBuffer = new byte[8*1024];
             WriteStart = 0;
             ReadStart = 0;
+            decodeCount = 0;
             Status = ParseStatus.PARSE_START;
             proccessMessage = handle;
             message = new HSMSMessage();
@@ -73,9 +75,13 @@ namespace SECSDataLib.Core.DataItem
                     default:
                         break;
                 }
+                bufferChanged = ChangeBufferIndex(nextLen);
+                if ((message.Length - 10) >= decodeCount)
+                {
+                    Status = ParseStatus.PARSE_END;
+                }
                 if (Status == ParseStatus.PARSE_END || nextLen > 0)
                 {
-                    bufferChanged = true;
                     break;
                 }
             }
@@ -83,6 +89,7 @@ namespace SECSDataLib.Core.DataItem
             {
                 if (proccessMessage != null)
                 {
+                    message.DataRoot = curData;
                     proccessMessage(message);
                 }
                 Reset();
@@ -97,6 +104,7 @@ namespace SECSDataLib.Core.DataItem
             storeStack.Clear();
             message = null;
             message = new HSMSMessage();
+            decodeCount = 0;
         }
 
         private int ParseTotalLen()
@@ -122,6 +130,7 @@ namespace SECSDataLib.Core.DataItem
                 message.Header.F = ReceiveBuffer[ReadStart + 3];
                 message.Header.SystemBytes = BitConverter.ToInt32(ReceiveBuffer, (ReadStart + 6));
                 ReadStart += retVal;
+                decodeCount += retVal;
                 retVal = 0;
                 Status = ParseStatus.PARSED_HSMS_HEADER;
                 if (message.Length == 10)
@@ -140,6 +149,7 @@ namespace SECSDataLib.Core.DataItem
                 curData = DataNodeUtils.CreateDataNode(type);
                 curData.Count = (ReceiveBuffer[ReadStart] & 0x03);
                 ReadStart += retVal;
+                decodeCount += retVal;
                 retVal = 0;
                 Status = ParseStatus.PARSED_ITEM_TYPE;
             }
@@ -156,7 +166,14 @@ namespace SECSDataLib.Core.DataItem
                 }
                 if (curData.DataType == DataNodeType.LIST)
                 {
-                    storeStack.Push(curData);
+                    if (curData.Length > 0)
+                    {
+                        storeStack.Push(curData);
+                    }
+                    else
+                    {
+                        AddNodeToList();
+                    }
                     Status = ParseStatus.PARSED_HSMS_HEADER;
                 }
                 else
@@ -164,6 +181,7 @@ namespace SECSDataLib.Core.DataItem
                     Status = ParseStatus.PARSED_ITEM_SIZE;
                 }
                 ReadStart += retVal;
+                decodeCount += retVal;
                 retVal = 0;
             }
             return retVal;
@@ -175,8 +193,11 @@ namespace SECSDataLib.Core.DataItem
             {
                 byte[] value = new byte[retVal];
                 Array.Copy(ReceiveBuffer, value, retVal);
-                Array.Copy(ReceiveBuffer, value, retVal);
+                curData.SetRawValues(new ArraySegment<byte>(value));
+
+                AddNodeToList();
                 ReadStart += retVal;
+                decodeCount += retVal;
                 retVal = 0;
             }
             return retVal;
@@ -187,7 +208,36 @@ namespace SECSDataLib.Core.DataItem
         }
         private bool ChangeBufferIndex(int nextLen)
         {
+            if (ReadStart > 0)
+            {
+                Array.Copy(ReceiveBuffer, ReadStart, ReceiveBuffer, 0, RemainLength);
+                WriteStart -= ReadStart;
+                ReadStart -= ReadStart;
+            }
+            if (nextLen > BufferLength)
+            {
+                byte[] newBuffer = new byte[nextLen * 2];
+                Array.Copy(ReceiveBuffer, 0, newBuffer, 0, RemainLength);
+                ReceiveBuffer = newBuffer;
+                return true;
+            }
             return false;
+        }
+        private void AddNodeToList()
+        {
+            while (storeStack.Count > 0)
+            {
+                DataNode list = storeStack.Peek();
+                list.GetChildren().Add(curData);
+                if (list.Length == list.GetChildren().Count)
+                {
+                    curData = storeStack.Pop();
+                }
+                else
+                {
+                    break;
+                }
+            }
         }
     }
 }
